@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDefaultSubDto } from './dto/create-default-sub.dto';
 import { UpdateDefaultSubDto } from './dto/update-default-sub.dto';
 import { DefaultSub } from './entities/default-sub.entity';
@@ -23,19 +23,29 @@ export class DefaultSubService {
     }
   }
 
+  //TODO: paginar
   findAll() {
-    return `This action returns all defaultSub`;
+    return this.defaultSubRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} defaultSub`;
+  async findOne(id: string) {
+    const defaultSub = await this.defaultSubRepository.findOneBy({ id });
+
+    if (!defaultSub)
+      throw new NotFoundException(`defaultSub con el ${id} no encontrado`);
+
+    return defaultSub;
   }
 
   update(id: number, updateDefaultSubDto: UpdateDefaultSubDto) {
     return `This action updates a #${id} defaultSub`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} defaultSub`;
+  async remove(id: string) {
+    const defaultSub = await this.findOne(id);
+
+    await this.defaultSubRepository.remove(defaultSub);
+
+    return defaultSub;
   }
 }

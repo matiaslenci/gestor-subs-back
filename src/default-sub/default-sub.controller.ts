@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseUUIDPipe,
+} from '@nestjs/common';
 import { DefaultSubService } from './default-sub.service';
 import { CreateDefaultSubDto } from './dto/create-default-sub.dto';
 import { UpdateDefaultSubDto } from './dto/update-default-sub.dto';
@@ -18,17 +27,20 @@ export class DefaultSubController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.defaultSubService.findOne(+id);
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.defaultSubService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDefaultSubDto: UpdateDefaultSubDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateDefaultSubDto: UpdateDefaultSubDto,
+  ) {
     return this.defaultSubService.update(+id, updateDefaultSubDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.defaultSubService.remove(+id);
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.defaultSubService.remove(id);
   }
 }

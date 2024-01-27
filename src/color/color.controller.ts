@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { ColorService } from './color.service';
 import { CreateColorDto } from './dto/create-color.dto';
@@ -26,8 +27,8 @@ export class ColorController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.colorService.findOne(+id);
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.colorService.findOne(id);
   }
 
   @Patch(':id')
@@ -36,7 +37,7 @@ export class ColorController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.colorService.remove(+id);
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.colorService.remove(id);
   }
 }

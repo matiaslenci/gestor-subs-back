@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-} from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateColorDto } from './dto/create-color.dto';
 import { UpdateColorDto } from './dto/update-color.dto';
 import { Color } from './entities/color.entity';
@@ -33,18 +28,26 @@ export class ColorService {
   }
 
   findAll() {
-    return `This action returns all color`;
+    return this.colorRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} color`;
+  async findOne(id: string) {
+    const color = await this.colorRepository.findOneBy({ id });
+
+    if (!color) throw new NotFoundException(`Color con el ${id} no encontrado`);
+
+    return color;
   }
 
   update(id: number, updateColorDto: UpdateColorDto) {
     return `This action updates a #${id} color`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} color`;
+  async remove(id: string) {
+    const color = await this.findOne(id);
+
+    await this.colorRepository.remove(color);
+
+    return color;
   }
 }
