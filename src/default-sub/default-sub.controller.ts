@@ -28,9 +28,9 @@ export class DefaultSubController {
     return this.defaultSubService.findAll(paginationDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.defaultSubService.findOne(id);
+  @Get(':term')
+  findOne(@Param('term') term: string) {
+    return this.defaultSubService.findOne(term);
   }
 
   @Patch(':id')

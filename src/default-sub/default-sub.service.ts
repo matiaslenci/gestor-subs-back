@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { handleDBExceptions } from '../common/utils/handleDBException';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
+import { validate as isUUID } from 'uuid';
 
 @Injectable()
 export class DefaultSubService {
@@ -33,11 +34,27 @@ export class DefaultSubService {
     });
   }
 
-  async findOne(id: string) {
-    const defaultSub = await this.defaultSubRepository.findOneBy({ id });
+  async findOne(term: string) {
+    let defaultSub: DefaultSub;
+
+    if (isUUID(term)) {
+      defaultSub = await this.defaultSubRepository.findOneBy({ id: term });
+    } else {
+      const query = this.defaultSubRepository.createQueryBuilder();
+      defaultSub = await query
+        .where('UPPER(name) =:name or slug =:slug', {
+          name: term.toUpperCase(),
+          slug: term.toLowerCase(),
+        })
+        .getOne();
+
+      // Es como:`select * from DefaultSub where slug='XX' or name='xxxx'`
+      // Esto evita injeccion SQL escapando caracteres
+      // Este Query Builder permite escribir tus propias consultas
+    }
 
     if (!defaultSub)
-      throw new NotFoundException(`defaultSub con el ${id} no encontrado`);
+      throw new NotFoundException(`defaultSub ${term} no encontrado`);
 
     return defaultSub;
   }

@@ -26,8 +26,9 @@ export class DefaultSub {
 
     this.slug = this.slug
       .toLowerCase()
-      .replaceAll(' ', '_')
-      .replaceAll("'", '');
+      .replaceAll(' +', '')
+      .replaceAll("'", '')
+      .replaceAll(' ', '_');
   }
 
   @BeforeInsert()
