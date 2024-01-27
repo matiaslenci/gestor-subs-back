@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DefaultSubModule } from './default-sub/default-sub.module';
+import { ColorModule } from './color/color.module';
 
 @Module({
   imports: [
@@ -17,6 +19,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       synchronize: true, // Cuando creamos un cambio en nuestras entidades automaticamente las sincroniza
       //! En prod synchronize usualmente va en false, deberiamos usar una migración
     }),
+
+    DefaultSubModule,
+
+    ColorModule,
   ],
 })
 export class AppModule {}
