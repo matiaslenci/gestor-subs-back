@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class DefaultSub {
@@ -17,4 +17,30 @@ export class DefaultSub {
     unique: true,
   })
   slug: string;
+
+  @BeforeInsert()
+  checkSlugInsert() {
+    if (!this.slug) {
+      this.slug = this.name;
+    }
+
+    this.slug = this.slug
+      .toLowerCase()
+      .replaceAll(' ', '_')
+      .replaceAll("'", '');
+  }
+
+  @BeforeInsert()
+  createLogo() {
+    if (!this.logo) {
+      const palabras = this.name.split(' ');
+      let iniciales = '';
+
+      for (let i = 0; i < Math.min(2, palabras.length); i++) {
+        iniciales += palabras[i].charAt(0);
+      }
+
+      this.logo = iniciales.toUpperCase();
+    }
+  }
 }

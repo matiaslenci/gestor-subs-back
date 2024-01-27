@@ -1,11 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { CreateDefaultSubDto } from './dto/create-default-sub.dto';
 import { UpdateDefaultSubDto } from './dto/update-default-sub.dto';
+import { DefaultSub } from './entities/default-sub.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { handleDBExceptions } from '../utils/handleDBException';
 
 @Injectable()
 export class DefaultSubService {
-  create(createDefaultSubDto: CreateDefaultSubDto) {
-    return 'This action adds a new defaultSub';
+  constructor(
+    @InjectRepository(DefaultSub)
+    private readonly defaultSubRepository: Repository<DefaultSub>,
+  ) {}
+  async create(createDefaultSubDto: CreateDefaultSubDto) {
+    try {
+      const defaultSub = this.defaultSubRepository.create(createDefaultSubDto);
+
+      await this.defaultSubRepository.save(defaultSub);
+      return defaultSub;
+    } catch (error) {
+      handleDBExceptions(error);
+    }
   }
 
   findAll() {

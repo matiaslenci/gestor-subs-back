@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Color {
@@ -10,4 +10,9 @@ export class Color {
     default: 'gris',
   })
   name: string;
+
+  @BeforeInsert()
+  nameLowerCase() {
+    this.name.toLowerCase();
+  }
 }
