@@ -7,6 +7,7 @@ export class Color {
 
   @Column('text', {
     unique: true,
+    default: 'gris',
   })
   name: string;
 }
