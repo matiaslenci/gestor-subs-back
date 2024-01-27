@@ -4,7 +4,8 @@ import { UpdateDefaultSubDto } from './dto/update-default-sub.dto';
 import { DefaultSub } from './entities/default-sub.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { handleDBExceptions } from '../utils/handleDBException';
+import { handleDBExceptions } from '../common/utils/handleDBException';
+import { PaginationDto } from 'src/common/dtos/pagination.dto';
 
 @Injectable()
 export class DefaultSubService {
@@ -23,9 +24,13 @@ export class DefaultSubService {
     }
   }
 
-  //TODO: paginar
-  findAll() {
-    return this.defaultSubRepository.find();
+  findAll(paginationDto: PaginationDto) {
+    const { limit = 10, offset = 0 } = paginationDto;
+
+    return this.defaultSubRepository.find({
+      take: limit,
+      skip: offset,
+    });
   }
 
   async findOne(id: string) {

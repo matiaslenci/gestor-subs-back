@@ -7,10 +7,12 @@ import {
   Param,
   Delete,
   ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import { DefaultSubService } from './default-sub.service';
 import { CreateDefaultSubDto } from './dto/create-default-sub.dto';
 import { UpdateDefaultSubDto } from './dto/update-default-sub.dto';
+import { PaginationDto } from '../common/dtos/pagination.dto';
 
 @Controller('default-sub')
 export class DefaultSubController {
@@ -22,8 +24,8 @@ export class DefaultSubController {
   }
 
   @Get()
-  findAll() {
-    return this.defaultSubService.findAll();
+  findAll(@Query() paginationDto: PaginationDto) {
+    return this.defaultSubService.findAll(paginationDto);
   }
 
   @Get(':id')

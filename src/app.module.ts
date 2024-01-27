@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DefaultSubModule } from './default-sub/default-sub.module';
 import { ColorModule } from './color/color.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ColorModule } from './color/color.module';
     DefaultSubModule,
 
     ColorModule,
+    CommonModule,
   ],
 })
 export class AppModule {}
