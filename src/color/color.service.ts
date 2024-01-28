@@ -39,8 +39,20 @@ export class ColorService {
     return color;
   }
 
-  update(id: number, updateColorDto: UpdateColorDto) {
-    return `This action updates a #${id} color`;
+  async update(id: string, updateColorDto: UpdateColorDto) {
+    const color = await this.colorRepository.preload({
+      id: id,
+      ...updateColorDto,
+    });
+
+    if (!color) throw new NotFoundException(`Color con id:${id} no encontrado`);
+
+    try {
+      await this.colorRepository.save(color);
+      return color;
+    } catch (error) {
+      handleDBExceptions(error);
+    }
   }
 
   async remove(id: string) {
