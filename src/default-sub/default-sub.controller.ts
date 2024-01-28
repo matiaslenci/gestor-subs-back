@@ -9,10 +9,10 @@ import {
   ParseUUIDPipe,
   Query,
 } from '@nestjs/common';
-import { DefaultSubService } from './default-sub.service';
 import { CreateDefaultSubDto } from './dto/create-default-sub.dto';
 import { UpdateDefaultSubDto } from './dto/update-default-sub.dto';
 import { PaginationDto } from '../common/dtos/pagination.dto';
+import { DefaultSubService } from './default-sub.service';
 
 @Controller('default-sub')
 export class DefaultSubController {
@@ -35,10 +35,10 @@ export class DefaultSubController {
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
-    @Body() updateDefaultSubDto: UpdateDefaultSubDto,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() UpdateDefaultSubDto: UpdateDefaultSubDto,
   ) {
-    return this.defaultSubService.update(+id, updateDefaultSubDto);
+    return this.defaultSubService.update(id, UpdateDefaultSubDto);
   }
 
   @Delete(':id')

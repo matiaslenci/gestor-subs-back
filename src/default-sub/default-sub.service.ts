@@ -59,8 +59,21 @@ export class DefaultSubService {
     return defaultSub;
   }
 
-  update(id: number, updateDefaultSubDto: UpdateDefaultSubDto) {
-    return `This action updates a #${id} defaultSub`;
+  async update(id: string, updateDefaultSubDto: UpdateDefaultSubDto) {
+    const defaultSub = await this.defaultSubRepository.preload({
+      id: id,
+      ...updateDefaultSubDto,
+    });
+
+    if (!defaultSub)
+      throw new NotFoundException(`Default Sub con id:${id} no encontrada`);
+
+    try {
+      await this.defaultSubRepository.save(defaultSub);
+      return defaultSub;
+    } catch (error) {
+      handleDBExceptions(error);
+    }
   }
 
   async remove(id: string) {
