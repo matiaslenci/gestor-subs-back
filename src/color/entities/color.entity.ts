@@ -1,4 +1,11 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { DefaultSub } from '../../default-sub/entities/default-sub.entity';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Color {
@@ -10,6 +17,9 @@ export class Color {
     default: 'gris',
   })
   name: string;
+
+  @ManyToOne(() => DefaultSub, (defaultSub) => defaultSub.color)
+  defaultSub: DefaultSub;
 
   @BeforeInsert()
   nameLowerCase() {

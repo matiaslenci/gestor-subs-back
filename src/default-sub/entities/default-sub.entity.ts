@@ -1,8 +1,10 @@
+import { Color } from '../../color/entities/color.entity';
 import {
   BeforeInsert,
   BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -23,6 +25,9 @@ export class DefaultSub {
     unique: true,
   })
   slug: string;
+
+  @OneToMany(() => Color, (color) => color.defaultSub, { cascade: true })
+  color: Color;
 
   @BeforeInsert()
   checkSlugInsert() {
