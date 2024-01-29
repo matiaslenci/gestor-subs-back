@@ -1,4 +1,10 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class DefaultSub {
@@ -43,5 +49,14 @@ export class DefaultSub {
 
       this.logo = iniciales.toUpperCase();
     }
+  }
+
+  @BeforeUpdate()
+  checkSlugUpdate() {
+    this.slug = this.slug
+      .toLowerCase()
+      .replaceAll(' +', '')
+      .replaceAll("'", '')
+      .replaceAll(' ', '_');
   }
 }
