@@ -4,21 +4,19 @@ import {
   Column,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
 export class Color {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column('text', {
-    unique: true,
-    default: 'gris',
-  })
+  @Column('text', { unique: true })
   name: string;
 
-  @ManyToOne(() => DefaultSub, (defaultSub) => defaultSub.color)
+  @OneToMany(() => DefaultSub, (defaultSub) => defaultSub.color)
   defaultSub: DefaultSub;
 
   @BeforeInsert()

@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateDefaultSubDto } from './dto/create-default-sub.dto';
 import { UpdateDefaultSubDto } from './dto/update-default-sub.dto';
 import { DefaultSub } from './entities/default-sub.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,19 +6,28 @@ import { Repository } from 'typeorm';
 import { handleDBExceptions } from '../common/utils/handleDBException';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { validate as isUUID } from 'uuid';
+import { CreateDefaultSubDto } from './dto/create-default-sub.dto';
+import { ColorService } from '../color/color.service';
 
 @Injectable()
 export class DefaultSubService {
   constructor(
     @InjectRepository(DefaultSub)
     private readonly defaultSubRepository: Repository<DefaultSub>,
+    private colorSrv: ColorService,
   ) {}
   async create(createDefaultSubDto: CreateDefaultSubDto) {
-    try {
-      const defaultSub = this.defaultSubRepository.create(createDefaultSubDto);
+    const colorFound = await this.colorSrv.findOne(createDefaultSubDto.colorId);
 
-      await this.defaultSubRepository.save(defaultSub);
-      return defaultSub;
+    if (!colorFound)
+      throw new NotFoundException(
+        `Color con id:${createDefaultSubDto.colorId} no encontrado`,
+      );
+    try {
+      const newDefaultSub =
+        this.defaultSubRepository.create(createDefaultSubDto);
+      await this.defaultSubRepository.save(newDefaultSub);
+      return { newDefaultSub, ...newDefaultSub.color };
     } catch (error) {
       handleDBExceptions(error);
     }
@@ -31,6 +39,7 @@ export class DefaultSubService {
     return this.defaultSubRepository.find({
       take: limit,
       skip: offset,
+      relations: ['color'],
     });
   }
 
@@ -56,30 +65,33 @@ export class DefaultSubService {
     if (!defaultSub)
       throw new NotFoundException(`defaultSub ${term} no encontrado`);
 
+    defaultSub.color = await this.colorSrv.findOne(defaultSub.colorId);
+
     return defaultSub;
   }
 
   async update(id: string, updateDefaultSubDto: UpdateDefaultSubDto) {
     const defaultSub = await this.defaultSubRepository.preload({
-      id: id,
+      id,
       ...updateDefaultSubDto,
     });
 
     if (!defaultSub)
-      throw new NotFoundException(`Default Sub con id:${id} no encontrada`);
+      throw new NotFoundException(`defaultSub con id:${id} no encontrado`);
 
-    try {
-      await this.defaultSubRepository.save(defaultSub);
-      return defaultSub;
-    } catch (error) {
-      handleDBExceptions(error);
-    }
+    await this.defaultSubRepository.save(defaultSub);
+
+    defaultSub.color = await this.colorSrv.findOne(defaultSub.colorId);
+
+    return defaultSub;
   }
 
   async remove(id: string) {
     const defaultSub = await this.findOne(id);
 
     await this.defaultSubRepository.remove(defaultSub);
+
+    defaultSub.color = await this.colorSrv.findOne(defaultSub.colorId);
 
     return defaultSub;
   }

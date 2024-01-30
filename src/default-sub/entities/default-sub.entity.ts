@@ -4,6 +4,8 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -26,7 +28,12 @@ export class DefaultSub {
   })
   slug: string;
 
-  @OneToMany(() => Color, (color) => color.defaultSub, { cascade: true })
+  @Column('int', {
+    default: 5,
+  })
+  colorId: number;
+
+  @ManyToOne(() => Color, (color) => color.defaultSub)
   color: Color;
 
   @BeforeInsert()
