@@ -31,7 +31,7 @@ export class ColorService {
     return this.colorRepository.find();
   }
 
-  async findOne(id: string) {
+  async findOne(id: number) {
     const color = await this.colorRepository.findOneBy({ id });
 
     if (!color) throw new NotFoundException(`Color con el ${id} no encontrado`);
@@ -39,7 +39,7 @@ export class ColorService {
     return color;
   }
 
-  async update(id: string, updateColorDto: UpdateColorDto) {
+  async update(id: number, updateColorDto: UpdateColorDto) {
     const color = await this.colorRepository.preload({
       id: id,
       ...updateColorDto,
@@ -55,7 +55,7 @@ export class ColorService {
     }
   }
 
-  async remove(id: string) {
+  async remove(id: number) {
     const color = await this.findOne(id);
 
     await this.colorRepository.remove(color);

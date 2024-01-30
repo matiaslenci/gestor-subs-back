@@ -1,4 +1,11 @@
-import { IsOptional, IsString, MinLength } from 'class-validator';
+import {
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  MinLength,
+} from 'class-validator';
+import { Color } from '../../color/entities/color.entity';
 
 export class CreateDefaultSubDto {
   @IsString()
@@ -14,4 +21,13 @@ export class CreateDefaultSubDto {
   @MinLength(1)
   @IsOptional()
   slug?: string;
+
+  @IsNumber()
+  @IsPositive()
+  @IsOptional()
+  colorId: number;
+
+  @IsString()
+  @IsOptional()
+  color?: Color;
 }
