@@ -4,8 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DefaultSub } from './entities/default-sub.entity';
 import { DefaultSubService } from './default-sub.service';
 import { ColorModule } from '../color/color.module';
-import { Color } from '../color/entities/color.entity';
-import { ColorService } from '../color/color.service';
 
 @Module({
   controllers: [DefaultSubController],

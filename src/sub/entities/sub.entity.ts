@@ -1,5 +1,7 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Color } from '../../color/entities/color.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity()
 export class Sub {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -12,15 +14,25 @@ export class Sub {
   @Column('text')
   logo: string;
 
-  @Column('float')
+  @Column('float', {
+    default: 0,
+  })
   price: number;
 
-  @Column('datetime')
+  @Column('text', { nullable: true })
   expiration: string;
 
-  @Column('text')
+  @Column('text', { nullable: true })
   email: string;
 
-  @Column('text')
+  @Column('text', { nullable: true })
   password: string;
+
+  @Column('int', {
+    default: 5,
+  })
+  colorId: number;
+
+  @ManyToOne(() => Color, (color) => color.sub)
+  color: Color;
 }

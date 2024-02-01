@@ -6,6 +6,7 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
+import { Color } from '../../color/entities/color.entity';
 import { Entity } from 'typeorm';
 
 @Entity()
@@ -23,7 +24,7 @@ export class CreateSubDto {
   @IsOptional()
   price?: number;
 
-  @IsDate()
+  @IsString()
   @IsOptional()
   expiration?: string;
 
@@ -34,4 +35,13 @@ export class CreateSubDto {
   @IsString()
   @IsOptional()
   password?: string;
+
+  @IsNumber()
+  @IsPositive()
+  @IsOptional()
+  colorId: number;
+
+  @IsString()
+  @IsOptional()
+  color?: Color;
 }
