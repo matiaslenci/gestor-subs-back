@@ -41,6 +41,7 @@ export const initialData: SeedData = {
     {
       name: 'HBO Max',
       colorId: 4,
+      logo: 'H',
     },
     {
       name: 'YouTube Premium',
@@ -84,7 +85,7 @@ export const initialData: SeedData = {
     {
       name: 'Xbox Game Pass',
       colorId: 7,
-      logo: 'XG',
+      logo: 'XP',
     },
     {
       name: 'PlayStation Plus',
@@ -112,7 +113,7 @@ export const initialData: SeedData = {
     },
     {
       name: 'Notion',
-      colorId: 2,
+      colorId: 6,
     },
     {
       name: 'Google One',
@@ -130,7 +131,8 @@ export const initialData: SeedData = {
     {
       name: 'X (Twitter)',
       colorId: 2,
-      logo: '6',
+      logo: 'X',
+      slug: 'x_twitter',
     },
     {
       name: 'Hulu',
