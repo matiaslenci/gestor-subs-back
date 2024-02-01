@@ -1,7 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseUUIDPipe,
+  Query,
+} from '@nestjs/common';
 import { SubService } from './sub.service';
 import { CreateSubDto } from './dto/create-sub.dto';
 import { UpdateSubDto } from './dto/update-sub.dto';
+import { PaginationDto } from '../common/dtos/pagination.dto';
 
 @Controller('sub')
 export class SubController {
@@ -13,22 +24,25 @@ export class SubController {
   }
 
   @Get()
-  findAll() {
-    return this.subService.findAll();
+  findAll(@Query() paginationDto: PaginationDto) {
+    return this.subService.findAll(paginationDto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.subService.findOne(+id);
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.subService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSubDto: UpdateSubDto) {
-    return this.subService.update(+id, updateSubDto);
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateSubDto: UpdateSubDto,
+  ) {
+    return this.subService.update(id, updateSubDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.subService.remove(+id);
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.subService.remove(id);
   }
 }

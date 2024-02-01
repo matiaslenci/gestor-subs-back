@@ -1,3 +1,4 @@
+import { Sub } from '../../sub/entities/sub.entity';
 import { DefaultSub } from '../../default-sub/entities/default-sub.entity';
 import {
   BeforeInsert,
@@ -18,6 +19,9 @@ export class Color {
 
   @OneToMany(() => DefaultSub, (defaultSub) => defaultSub.color)
   defaultSub: DefaultSub;
+
+  @OneToMany(() => Sub, (sub) => sub.color)
+  sub: Sub;
 
   @BeforeInsert()
   nameLowerCase() {
