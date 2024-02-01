@@ -9,6 +9,6 @@ import { ColorModule } from '../color/color.module';
   controllers: [DefaultSubController],
   providers: [DefaultSubService],
   imports: [TypeOrmModule.forFeature([DefaultSub]), ColorModule],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, DefaultSubService],
 })
 export class DefaultSubModule {}

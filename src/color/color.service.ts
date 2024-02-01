@@ -62,4 +62,14 @@ export class ColorService {
 
     return color;
   }
+
+  async deleteAllColors() {
+    const query = this.colorRepository.createQueryBuilder();
+
+    try {
+      return await query.delete().where({}).execute();
+    } catch (error) {
+      handleDBExceptions(error);
+    }
+  }
 }

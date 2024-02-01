@@ -95,4 +95,20 @@ export class DefaultSubService {
 
     return defaultSub;
   }
+
+  /**
+   * Elimina todos los defaultSubs de la base de datos
+   * ! No usar en productivo
+   */
+  async deleteAllDefaultSubs() {
+    const query = this.defaultSubRepository.createQueryBuilder();
+
+    try {
+      return await query.delete().where({}).execute();
+    } catch (error) {
+      handleDBExceptions(error);
+    }
+
+    return 'DefaultSubs eliminados';
+  }
 }

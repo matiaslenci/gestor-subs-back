@@ -5,6 +5,7 @@ import { DefaultSubModule } from './default-sub/default-sub.module';
 import { ColorModule } from './color/color.module';
 import { CommonModule } from './common/common.module';
 import { SubModule } from './sub/sub.module';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { SubModule } from './sub/sub.module';
     ColorModule,
     CommonModule,
     SubModule,
+    SeedModule,
   ],
 })
 export class AppModule {}
