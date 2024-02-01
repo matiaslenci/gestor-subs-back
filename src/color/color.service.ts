@@ -2,8 +2,8 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateColorDto } from './dto/create-color.dto';
 import { UpdateColorDto } from './dto/update-color.dto';
 import { Color } from './entities/color.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { handleDBExceptions } from '../common/utils/handleDBException';
 
 @Injectable()
@@ -14,6 +14,8 @@ export class ColorService {
   constructor(
     @InjectRepository(Color)
     private readonly colorRepository: Repository<Color>,
+    @InjectEntityManager()
+    private entityManager: EntityManager,
   ) {}
 
   async create(createColorDto: CreateColorDto) {
@@ -61,5 +63,27 @@ export class ColorService {
     await this.colorRepository.remove(color);
 
     return color;
+  }
+
+  async deleteAllColors() {
+    const query = this.colorRepository.createQueryBuilder();
+
+    try {
+      return await query.delete().where({}).execute();
+    } catch (error) {
+      handleDBExceptions(error);
+    }
+  }
+
+  async reinicirSecuenciaId() {
+    const query = `
+    SELECT setval(
+      pg_get_serial_sequence('color', 'id'),
+      COALESCE(MAX(id), 1),
+      false
+    )
+    FROM color;
+  `;
+    await this.entityManager.query(query);
   }
 }
