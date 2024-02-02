@@ -46,6 +46,8 @@ export class DefaultSub {
       .toLowerCase()
       .replaceAll(' +', '')
       .replaceAll("'", '')
+      .replaceAll('(', '')
+      .replaceAll(')', '')
       .replaceAll(' ', '_');
   }
 
@@ -69,6 +71,8 @@ export class DefaultSub {
       .toLowerCase()
       .replaceAll(' +', '')
       .replaceAll("'", '')
+      .replaceAll('(', '')
+      .replaceAll(')', '')
       .replaceAll(' ', '_');
   }
 }
