@@ -11,7 +11,7 @@ import {
 
 @Entity()
 export class Color {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column('text', { unique: true })

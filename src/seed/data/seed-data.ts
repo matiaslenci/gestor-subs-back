@@ -6,6 +6,7 @@ interface SeedDefaultSub {
 }
 
 interface SeedColor {
+  id: number;
   name: Colors;
 }
 
@@ -147,13 +148,13 @@ export const initialData: SeedData = {
   ],
 
   color: [
-    { name: 'rojo' },
-    { name: 'azul' },
-    { name: 'gris' },
-    { name: 'rosa' },
-    { name: 'verde' },
-    { name: 'morado' },
-    { name: 'amarillo' },
-    { name: 'naranja' },
+    { id: 1, name: 'rojo' },
+    { id: 2, name: 'azul' },
+    { id: 3, name: 'gris' },
+    { id: 4, name: 'rosa' },
+    { id: 5, name: 'verde' },
+    { id: 6, name: 'morado' },
+    { id: 7, name: 'amarillo' },
+    { id: 8, name: 'naranja' },
   ],
 };
