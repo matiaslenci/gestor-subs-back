@@ -1,8 +1,10 @@
+import { Sub } from '../../sub/entities/sub.entity';
 import {
   BeforeInsert,
   BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -37,6 +39,9 @@ export class User {
     default: ['user'],
   })
   roles: string[];
+
+  @OneToMany(() => Sub, (sub) => sub.user)
+  sub: Sub;
 
   @BeforeInsert()
   createAvatar() {

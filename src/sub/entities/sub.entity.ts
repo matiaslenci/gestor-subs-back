@@ -1,3 +1,4 @@
+import { User } from '../../auth/entities/user.entity';
 import { Color } from '../../color/entities/color.entity';
 import {
   BeforeInsert,
@@ -42,10 +43,15 @@ export class Sub {
   @ManyToOne(() => Color, (color) => color.sub)
   color: Color;
 
+  @ManyToOne(() => User, (user) => user.sub, { eager: true })
+  user: User;
+
   @BeforeInsert()
   checkFields() {
     this.name = this.name.trim();
-    this.email = this.email.toLowerCase().trim();
-    this.password = this.password.trim();
+
+    if (this.email) this.email = this.email.toLowerCase().trim();
+
+    if (this.password) this.password = this.password.trim();
   }
 }

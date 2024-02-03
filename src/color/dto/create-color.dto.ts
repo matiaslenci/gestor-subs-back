@@ -1,6 +1,17 @@
-import { IsIn, IsString } from 'class-validator';
+import {
+  IsIn,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+} from 'class-validator';
 
 export class CreateColorDto {
+  @IsNumber()
+  @IsPositive()
+  @IsOptional()
+  id?: number;
+
   @IsString()
   @IsIn([
     'rojo',

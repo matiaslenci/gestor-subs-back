@@ -10,6 +10,6 @@ import { AuthModule } from '../auth/auth.module';
   controllers: [SubController],
   providers: [SubService],
   imports: [TypeOrmModule.forFeature([Sub]), ColorModule, AuthModule],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, SubService],
 })
 export class SubModule {}

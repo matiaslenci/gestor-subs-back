@@ -86,4 +86,8 @@ export class ColorService {
   `;
     await this.entityManager.query(query);
   }
+
+  getRepo() {
+    return this.colorRepository;
+  }
 }

@@ -96,6 +96,10 @@ export class DefaultSubService {
     return defaultSub;
   }
 
+  getRepo() {
+    return this.defaultSubRepository;
+  }
+
   /**
    * Elimina todos los defaultSubs de la base de datos
    * ! No usar en productivo
