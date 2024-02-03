@@ -25,9 +25,9 @@ export class SeedService {
     const insertPromises = [];
 
     // Itero sobre mi seed y lo creo con la clase de mi service
-    defaultSubs.forEach((defaultSub) => {
+    /*     defaultSubs.forEach((defaultSub) => {
       insertPromises.push(this.defaultSubSrv.create(defaultSub));
-    });
+    }); */
 
     await Promise.all(insertPromises);
 

@@ -39,7 +39,7 @@ export class CreateSubDto {
   @IsNumber()
   @IsPositive()
   @IsOptional()
-  colorId: number;
+  colorId?: number;
 
   @IsString()
   @IsOptional()

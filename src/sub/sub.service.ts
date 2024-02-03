@@ -8,6 +8,7 @@ import { ColorService } from '../color/color.service';
 import { handleDBExceptions } from '../common/utils/handleDBException';
 import { PaginationDto } from '../common/dtos/pagination.dto';
 import { validate as isUUID } from 'uuid';
+import { User } from '../auth/entities/user.entity';
 
 @Injectable()
 export class SubService {
@@ -17,15 +18,17 @@ export class SubService {
     private colorSrv: ColorService,
   ) {}
 
-  async create(createSubDto: CreateSubDto) {
+  async create(createSubDto: CreateSubDto, user: User) {
     const colorFound = await this.colorSrv.findOne(createSubDto.colorId);
+
+    const { ...detailsSub } = createSubDto;
 
     if (!colorFound)
       throw new NotFoundException(
         `Color con id:${createSubDto.colorId} no encontrado`,
       );
     try {
-      const sub = this.subRepository.create(createSubDto);
+      const sub = this.subRepository.create({ ...detailsSub, user });
       await this.subRepository.save(sub);
       return { sub, ...sub.color };
     } catch (error) {
@@ -57,13 +60,15 @@ export class SubService {
     return sub;
   }
 
-  async update(id: string, updateSubDto: UpdateSubDto) {
+  async update(id: string, updateSubDto: UpdateSubDto, user: User) {
     const sub = await this.subRepository.preload({
       id,
       ...updateSubDto,
     });
 
     if (!sub) throw new NotFoundException(`sub con id:${id} no encontrado`);
+
+    sub.user = user;
 
     await this.subRepository.save(sub);
 
