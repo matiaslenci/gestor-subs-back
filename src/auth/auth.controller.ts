@@ -1,11 +1,21 @@
-import { Controller, Post, Body, Get, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  UseGuards,
+  Req,
+  SetMetadata,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 import { AuthGuard } from '@nestjs/passport';
 
 import { LoginUserDto, CreateUserDto } from './dto';
-import { GetUser, RawHeaders } from './decorators';
+import { GetUser, RawHeaders, RoleProtected } from './decorators';
 import { User } from './entities/user.entity';
+import { UserRoleGuard } from './guards/user-role.guard';
+import { ValidRoles } from './interfaces';
 
 @Controller('auth')
 export class AuthController {
@@ -22,12 +32,9 @@ export class AuthController {
   }
 
   @Get('private')
-  @UseGuards(AuthGuard())
-  testingPrivateRoute(
-    @GetUser() user: User,
-    @GetUser('email') userEmail: string,
-    @RawHeaders() rawHeaders: string[],
-  ) {
-    return { message: 'testing private route', user, userEmail, rawHeaders };
+  @RoleProtected(ValidRoles.admin, ValidRoles.superUser)
+  @UseGuards(AuthGuard(), UserRoleGuard)
+  testingPrivateRoute(@GetUser() user: User) {
+    return { message: 'testing private route', user };
   }
 }
