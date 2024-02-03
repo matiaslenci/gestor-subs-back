@@ -28,21 +28,11 @@ type Colors =
   | 'naranja';
 
 interface SeedData {
-  users: SeedUser[];
   defaultSub: SeedDefaultSub[];
   color: SeedColor[];
 }
 
 export const initialData: SeedData = {
-  users: [
-    {
-      email: 'matiaslenci@gmail.com',
-      fullName: 'Matias Lenci',
-      password: process.env.ADMIN_PASSWORD,
-      roles: ['user', 'admin'],
-    },
-  ],
-
   defaultSub: [
     {
       name: 'Netflix',
