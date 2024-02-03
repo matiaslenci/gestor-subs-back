@@ -31,9 +31,9 @@ export class AuthController {
     return this.authService.login(loginUserDto);
   }
 
-  @Get('private')
-  @Auth(ValidRoles.admin)
-  testingPrivateRoute(@GetUser() user: User) {
-    return { message: 'testing private route', user };
+  @Get('check-status')
+  @Auth()
+  checkAuthStatus(@GetUser() user: User) {
+    return this.authService.checkAuthStatus(user);
   }
 }
