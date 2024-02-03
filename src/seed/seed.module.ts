@@ -3,10 +3,11 @@ import { SeedService } from './seed.service';
 import { SeedController } from './seed.controller';
 import { DefaultSubModule } from '../default-sub/default-sub.module';
 import { ColorModule } from '../color/color.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   controllers: [SeedController],
   providers: [SeedService],
-  imports: [DefaultSubModule, ColorModule],
+  imports: [DefaultSubModule, ColorModule, AuthModule],
 })
 export class SeedModule {}

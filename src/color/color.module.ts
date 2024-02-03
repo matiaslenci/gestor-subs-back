@@ -3,13 +3,12 @@ import { ColorService } from './color.service';
 import { ColorController } from './color.controller';
 import { Color } from './entities/color.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DefaultSubModule } from '../default-sub/default-sub.module';
-import { DefaultSub } from '../default-sub/entities/default-sub.entity';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   controllers: [ColorController],
   providers: [ColorService],
-  imports: [TypeOrmModule.forFeature([Color])],
+  imports: [TypeOrmModule.forFeature([Color]), AuthModule],
   exports: [TypeOrmModule, ColorService],
 })
 export class ColorModule {}

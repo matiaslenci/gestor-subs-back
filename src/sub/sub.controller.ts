@@ -13,8 +13,10 @@ import { SubService } from './sub.service';
 import { CreateSubDto } from './dto/create-sub.dto';
 import { UpdateSubDto } from './dto/update-sub.dto';
 import { PaginationDto } from '../common/dtos/pagination.dto';
+import { Auth } from '../auth/decorators';
 
 @Controller('sub')
+@Auth()
 export class SubController {
   constructor(private readonly subService: SubService) {}
 

@@ -13,8 +13,10 @@ import { CreateDefaultSubDto } from './dto/create-default-sub.dto';
 import { UpdateDefaultSubDto } from './dto/update-default-sub.dto';
 import { PaginationDto } from '../common/dtos/pagination.dto';
 import { DefaultSubService } from './default-sub.service';
+import { Auth } from '../auth/decorators';
 
 @Controller('default-sub')
+@Auth()
 export class DefaultSubController {
   constructor(private readonly defaultSubService: DefaultSubService) {}
 
