@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -19,7 +19,9 @@ export class User {
   @Column('text')
   avatar: string;
 
-  @Column('bool') // Postgres utiliza bool
+  @Column('bool', {
+    default: true,
+  }) // Postgres utiliza bool
   isActive: boolean;
 
   @Column('text', {
@@ -27,4 +29,18 @@ export class User {
     default: ['user'],
   })
   roles: string[];
+
+  @BeforeInsert()
+  createAvatar() {
+    if (!this.avatar) {
+      const palabras = this.fullName.split(' ');
+      let iniciales = '';
+
+      for (let i = 0; i < Math.min(2, palabras.length); i++) {
+        iniciales += palabras[i].charAt(0);
+      }
+
+      this.avatar = iniciales.toUpperCase();
+    }
+  }
 }
