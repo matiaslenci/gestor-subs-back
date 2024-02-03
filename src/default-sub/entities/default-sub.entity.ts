@@ -29,7 +29,8 @@ export class DefaultSub {
   slug: string;
 
   @Column('int', {
-    default: 5,
+    default: 6,
+    select: false,
   })
   colorId: number;
 

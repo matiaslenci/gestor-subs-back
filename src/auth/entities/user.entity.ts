@@ -1,4 +1,10 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -44,5 +50,19 @@ export class User {
 
       this.avatar = iniciales.toUpperCase();
     }
+  }
+
+  @BeforeInsert()
+  checkFields() {
+    this.email = this.email.toLowerCase().trim();
+    this.fullName = this.fullName.toLowerCase().trim();
+    this.avatar = this.avatar.toLowerCase().trim();
+    this.password = this.password.trim();
+  }
+
+  @BeforeUpdate()
+  checkFieldsUpdate() {
+    this.checkFields();
+    this.createAvatar();
   }
 }
