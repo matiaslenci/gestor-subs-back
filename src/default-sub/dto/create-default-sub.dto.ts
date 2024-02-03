@@ -25,7 +25,7 @@ export class CreateDefaultSubDto {
   @IsNumber()
   @IsPositive()
   @IsOptional()
-  colorId: number;
+  colorId?: number;
 
   @IsString()
   @IsOptional()

@@ -86,4 +86,8 @@ export class SubService {
 
     return sub;
   }
+
+  getRepo() {
+    return this.subRepository;
+  }
 }

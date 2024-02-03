@@ -2,17 +2,22 @@ import { Injectable } from '@nestjs/common';
 import { DefaultSubService } from '../default-sub/default-sub.service';
 import { ColorService } from '../color/color.service';
 import { initialData } from './data/seed-data';
+import { SubService } from '../sub/sub.service';
 
 @Injectable()
 export class SeedService {
   constructor(
     private readonly defaultSubSrv: DefaultSubService,
     private readonly colorSrv: ColorService,
+    private readonly subSrv: SubService,
   ) {}
 
   async runSeed() {
-    // await this.insertNewColors();
+    const query = this.subSrv.getRepo().createQueryBuilder();
+    await query.delete().where({}).execute();
+
     await this.insertNewDefaultSubs();
+    //await this.insertNewColors();
 
     return 'SEED EXECUTED';
   }
@@ -25,9 +30,9 @@ export class SeedService {
     const insertPromises = [];
 
     // Itero sobre mi seed y lo creo con la clase de mi service
-    /*     defaultSubs.forEach((defaultSub) => {
+    defaultSubs.forEach((defaultSub) => {
       insertPromises.push(this.defaultSubSrv.create(defaultSub));
-    }); */
+    });
 
     await Promise.all(insertPromises);
 

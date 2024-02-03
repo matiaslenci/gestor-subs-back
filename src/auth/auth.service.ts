@@ -63,6 +63,10 @@ export class AuthService {
     };
   }
 
+  getRepo() {
+    return this.userRepository;
+  }
+
   private getJwtToken(payload: JwtPayLoad) {
     const token = this.jwtService.sign(payload); //? Sign(firmar jwt)
     return token;
