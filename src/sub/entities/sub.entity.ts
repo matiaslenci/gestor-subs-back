@@ -1,5 +1,11 @@
 import { Color } from '../../color/entities/color.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Sub {
@@ -35,4 +41,11 @@ export class Sub {
 
   @ManyToOne(() => Color, (color) => color.sub)
   color: Color;
+
+  @BeforeInsert()
+  checkFields() {
+    this.name = this.name.trim();
+    this.email = this.email.toLowerCase().trim();
+    this.password = this.password.trim();
+  }
 }

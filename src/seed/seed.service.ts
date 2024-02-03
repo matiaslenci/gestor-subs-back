@@ -11,7 +11,7 @@ export class SeedService {
   ) {}
 
   async runSeed() {
-    await this.insertNewColors();
+    // await this.insertNewColors();
     await this.insertNewDefaultSubs();
 
     return 'SEED EXECUTED';
