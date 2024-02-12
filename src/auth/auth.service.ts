@@ -35,7 +35,7 @@ export class AuthService {
       delete user.password;
 
       return {
-        ...user,
+        user: { ...user },
         token: this.getJwtToken({ id: user.id }),
       };
     } catch (error) {
@@ -48,7 +48,15 @@ export class AuthService {
 
     const user = await this.userRepository.findOne({
       where: { email },
-      select: { email: true, password: true, id: true },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        avatar: true,
+        roles: true,
+        fullName: true,
+        isActive: true,
+      },
     });
 
     if (!user)
@@ -57,15 +65,17 @@ export class AuthService {
     if (!bcrypt.compareSync(password, user.password))
       throw new UnauthorizedException('Credenciales no validas(password)');
 
+    delete user.password;
+
     return {
-      ...user,
+      user: { ...user },
       token: this.getJwtToken({ id: user.id }),
     };
   }
 
   async checkAuthStatus(user: User) {
     return {
-      ...user,
+      user: { ...user },
       token: this.getJwtToken({ id: user.id }),
     };
   }
