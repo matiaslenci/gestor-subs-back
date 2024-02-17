@@ -14,13 +14,14 @@ import { UpdateDefaultSubDto } from './dto/update-default-sub.dto';
 import { PaginationDto } from '../common/dtos/pagination.dto';
 import { DefaultSubService } from './default-sub.service';
 import { Auth } from '../auth/decorators';
+import { ValidRoles } from './../auth/interfaces/valid-roles';
 
 @Controller('default-sub')
-@Auth()
 export class DefaultSubController {
   constructor(private readonly defaultSubService: DefaultSubService) {}
 
   @Post()
+  @Auth(ValidRoles.admin)
   create(@Body() createDefaultSubDto: CreateDefaultSubDto) {
     return this.defaultSubService.create(createDefaultSubDto);
   }
@@ -36,6 +37,7 @@ export class DefaultSubController {
   }
 
   @Patch(':id')
+  @Auth(ValidRoles.admin)
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() UpdateDefaultSubDto: UpdateDefaultSubDto,
@@ -44,6 +46,7 @@ export class DefaultSubController {
   }
 
   @Delete(':id')
+  @Auth(ValidRoles.admin)
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.defaultSubService.remove(id);
   }

@@ -20,7 +20,6 @@ export class CreateSubDto {
   logo: string;
 
   @IsNumber()
-  @IsPositive()
   @IsOptional()
   price?: number;
 

@@ -30,7 +30,6 @@ export class DefaultSub {
 
   @Column('int', {
     default: 3,
-    select: false,
   })
   colorId: number;
 
