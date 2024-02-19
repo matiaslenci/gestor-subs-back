@@ -27,6 +27,7 @@ export class SubService {
       throw new NotFoundException(
         `Color con id:${createSubDto.colorId} no encontrado`,
       );
+
     try {
       const sub = this.subRepository.create({ ...detailsSub, user });
       await this.subRepository.save(sub);
@@ -43,6 +44,13 @@ export class SubService {
       take: limit,
       skip: offset,
       relations: ['color'],
+    });
+  }
+
+  findAllByUser(user: User) {
+    return this.subRepository.find({
+      relations: ['color'],
+      where: { user: { id: user.id } },
     });
   }
 
@@ -85,6 +93,20 @@ export class SubService {
     sub.color = await this.colorSrv.findOne(sub.colorId);
 
     return sub;
+  }
+
+  //TODO: Arreglar
+  async removeAllByUser(user: User) {
+    const subs: Sub[] = await this.findAllByUser(user);
+
+    for (const sub of subs) {
+      // await this.subRepository.remove(sub.id);
+    }
+
+    return {
+      statusCode: 204,
+      message: 'Se eliminaron todas las subs del usuario',
+    };
   }
 
   getRepo() {
