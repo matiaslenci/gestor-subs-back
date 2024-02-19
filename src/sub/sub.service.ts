@@ -10,8 +10,12 @@ import { PaginationDto } from '../common/dtos/pagination.dto';
 import { validate as isUUID } from 'uuid';
 import { User } from '../auth/entities/user.entity';
 
+import * as CryptoJS from 'crypto-js';
+
 @Injectable()
 export class SubService {
+  private key = process.env.CRYPTO_KEY;
+
   constructor(
     @InjectRepository(Sub)
     private readonly subRepository: Repository<Sub>,
@@ -21,16 +25,25 @@ export class SubService {
   async create(createSubDto: CreateSubDto, user: User) {
     const colorFound = await this.colorSrv.findOne(createSubDto.colorId);
 
-    const { ...detailsSub } = createSubDto;
+    const { password, ...detailsSub } = createSubDto;
 
     if (!colorFound)
       throw new NotFoundException(
         `Color con id:${createSubDto.colorId} no encontrado`,
       );
 
+    const encryptedPassword = this.encrypt(password);
+
     try {
-      const sub = this.subRepository.create({ ...detailsSub, user });
+      const sub = this.subRepository.create({
+        password: encryptedPassword,
+        ...detailsSub,
+        user,
+      });
       await this.subRepository.save(sub);
+
+      delete sub.password;
+
       return { sub, ...sub.color };
     } catch (error) {
       handleDBExceptions(error);
@@ -63,24 +76,33 @@ export class SubService {
 
     if (!sub) throw new NotFoundException(`sub ${term} no encontrado`);
 
+    sub.password = await this.decrypt(sub.password);
+
     sub.color = await this.colorSrv.findOne(sub.colorId);
 
     return sub;
   }
 
   async update(id: string, updateSubDto: UpdateSubDto, user: User) {
+    const { password, ...detailsSub } = updateSubDto;
+
+    const encryptedPassword = await this.encrypt(password);
+
     const sub = await this.subRepository.preload({
       id,
-      ...updateSubDto,
+      password: encryptedPassword,
+      ...detailsSub,
     });
 
     if (!sub) throw new NotFoundException(`sub con id:${id} no encontrado`);
 
     sub.user = user;
 
+    sub.color = await this.colorSrv.findOne(sub.colorId);
+
     await this.subRepository.save(sub);
 
-    sub.color = await this.colorSrv.findOne(sub.colorId);
+    delete sub.password;
 
     return sub;
   }
@@ -107,6 +129,17 @@ export class SubService {
       statusCode: 204,
       message: 'Se eliminaron todas las subs del usuario',
     };
+  }
+
+  encrypt(data: string) {
+    const encryptedData = CryptoJS.AES.encrypt(data, this.key).toString();
+    return encryptedData;
+  }
+
+  decrypt(encryptedData: string) {
+    const bytes = CryptoJS.AES.decrypt(encryptedData, this.key);
+    const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+    return decryptedData;
   }
 
   getRepo() {
