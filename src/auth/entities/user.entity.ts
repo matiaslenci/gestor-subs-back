@@ -59,10 +59,10 @@ export class User {
 
   @BeforeInsert()
   checkFields() {
-    this.email = this.email.toLowerCase().trim();
-    this.fullName = this.fullName.toLowerCase().trim();
-    this.avatar = this.avatar.toLowerCase().trim();
-    this.password = this.password.trim();
+    if (this.email) this.email = this.email.toLowerCase().trim();
+    if (this.fullName) this.fullName = this.fullName.toLowerCase().trim();
+    if (this.avatar) this.avatar = this.avatar.toLowerCase().trim();
+    if (this.password) this.password = this.password.trim();
   }
 
   @BeforeUpdate()

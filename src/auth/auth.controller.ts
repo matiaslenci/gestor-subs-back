@@ -1,7 +1,7 @@
-import { Controller, Post, Body, Get, HttpCode } from '@nestjs/common';
+import { Controller, Post, Body, Get, HttpCode, Patch } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
-import { LoginUserDto, CreateUserDto } from './dto';
+import { LoginUserDto, CreateUserDto, UpdateUserDto } from './dto';
 import { Auth, GetUser } from './decorators';
 import { User } from './entities/user.entity';
 
@@ -19,6 +19,12 @@ export class AuthController {
   @HttpCode(200)
   loginUser(@Body() loginUserDto: LoginUserDto) {
     return this.authService.login(loginUserDto);
+  }
+
+  @Patch('update')
+  @Auth()
+  updateUser(@GetUser() user: User, @Body() updateUserDto: UpdateUserDto) {
+    return this.authService.update(user, updateUserDto);
   }
 
   @Get('check-status')

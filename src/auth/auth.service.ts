@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import * as bcrypt from 'bcrypt';
 
-import { LoginUserDto, CreateUserDto } from './dto';
+import { LoginUserDto, CreateUserDto, UpdateUserDto } from './dto';
 import { User } from './entities/user.entity';
 import { JwtPayLoad } from './interfaces';
 import { JwtService } from '@nestjs/jwt';
@@ -73,6 +73,40 @@ export class AuthService {
     };
   }
 
+  async update(user: User, updateUserDto: UpdateUserDto) {
+    try {
+      if (updateUserDto.email && updateUserDto.email !== user.email) {
+        const userExists = await this.userRepository.findOne({
+          where: { email: updateUserDto.email },
+        });
+        if (userExists) {
+          throw new BadRequestException('Email ya registrado');
+        }
+      }
+
+      const { fullName, email, avatar, ...userData } = updateUserDto;
+
+      const userUpdated = await this.userRepository.preload({
+        id: user.id,
+        fullName: fullName ? fullName : user.fullName,
+        email: email ? email : user.email,
+        avatar: avatar ? avatar : user.avatar,
+        ...userData,
+      });
+
+      await this.userRepository.save(userUpdated);
+
+      return {
+        ...userUpdated,
+        token: this.getJwtToken({ id: userUpdated.id }),
+      };
+    } catch (error) {
+      console.error(error);
+
+      this.handleDBErrors(error);
+    }
+  }
+
   async checkAuthStatus(user: User) {
     return {
       user: { ...user },
@@ -93,6 +127,9 @@ export class AuthService {
     if (error.code === '23505')
       throw new BadRequestException('Error email ya registrado', error.detail);
 
-    throw new InternalServerErrorException('Please check server logs');
+    throw new InternalServerErrorException(
+      'Please check server logs',
+      error.detail,
+    );
   }
 }
