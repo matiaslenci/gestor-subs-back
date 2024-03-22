@@ -20,7 +20,7 @@ import { AuthModule } from './auth/auth.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
-      synchronize: true, // Cuando creamos un cambio en nuestras entidades automaticamente las sincroniza
+      synchronize: false, // Cuando creamos un cambio en nuestras entidades automaticamente las sincroniza
       //! En prod synchronize usualmente va en false, deberiamos usar una migración
     }),
 
