@@ -16,8 +16,8 @@ export class SeedService {
     const query = this.subSrv.getRepo().createQueryBuilder();
     await query.delete().where({}).execute();
 
+    await this.insertNewColors();
     await this.insertNewDefaultSubs();
-    //await this.insertNewColors();
 
     return 'SEED EXECUTED';
   }
@@ -40,8 +40,8 @@ export class SeedService {
   }
 
   private async insertNewColors() {
-    await this.colorSrv.deleteAllColors();
-    await this.colorSrv.reinicirSecuenciaId();
+    //  await this.colorSrv.deleteAllColors();
+    // await this.colorSrv.reinicirSecuenciaId();
 
     const colors = initialData.color;
 
